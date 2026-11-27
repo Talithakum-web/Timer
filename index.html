@@ -23,11 +23,28 @@
   button:hover {
     background: #ec407a;
   }
+.awan {
+  width: 90%;
+  max-width: 380px;
+  aspect-ratio: 600 / 356;
+  margin: 20px auto;
+  background: url('awan.png') center / contain no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.awan p {
+  margin: 0;
+  color: #5a3410;
+}
 </style>
 
 <h1>Pomodoro Timer</h1>
+<div class="awan">
 <p id="label">Waktu fokus</p>
 <p id="waktu">25:00</p>
+</div>
 
 <button onclick="mulai()">Mulai</button>
 <button onclick="jeda()">Jeda</button>
