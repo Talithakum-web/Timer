@@ -1,0 +1,103 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  h1 { color: #e75a8a; }
+  body {
+    background: #c8d9ec;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding: 20px;
+  }
+  #waktu {
+    font-size: 72px;
+    font-weight: 600;
+  }
+  button {
+    font-family: 'Poppins', sans-serif;
+    background: #f48fb1;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+  }
+  button:hover {
+    background: #ec407a;
+  }
+</style>
+
+<h1>Pomodoro Timer</h1>
+<p id="label">Waktu fokus</p>
+<p id="waktu">25:00</p>
+
+<button onclick="mulai()">Mulai</button>
+<button onclick="jeda()">Jeda</button>
+<button onclick="reset()">Reset</button>
+
+<script>
+  let mode = 'fokus';
+  let sisa = 5;
+  let jalan = null;
+  let audio = null;
+
+  function tampil() {
+    let menit = Math.floor(sisa / 60);
+    let detik = sisa % 60;
+    let teks = String(menit).padStart(2, '0') + ':' + String(detik).padStart(2, '0');
+    document.getElementById('waktu').innerText = teks;
+  }
+
+  tampil();
+
+  function mulai() {
+    if (jalan) return;
+    if (!audio) audio = new AudioContext();
+    jalan = setInterval(function () {
+      sisa = sisa - 1;
+      tampil();
+      if (sisa <= 0) {
+        ganti();
+      }
+    }, 1000);
+  }
+
+  function jeda() {
+    clearInterval(jalan);
+    jalan = null;
+  }
+
+  function reset() {
+    jeda();
+    if (mode === 'fokus') {
+      sisa = 25 * 60;
+    } else {
+      sisa = 5 * 60;
+    }
+    tampil();
+  }
+
+  function ganti() {
+    jeda();
+    bunyi();
+    if (mode === 'fokus') {
+      mode = 'istirahat';
+      sisa = 5 * 60;
+      document.getElementById('label').innerText = 'Waktunya istirahat!';
+      document.body.style.background = '#c8ecd9';
+    } else {
+      mode = 'fokus';
+      sisa = 25 * 60;
+      document.getElementById('label').innerText = 'Waktu fokus';
+      document.body.style.background = '#c8d9ec';
+    }
+    tampil();
+  }
+
+  function bunyi() {
+    if (!audio) return;
+    let nada = audio.createOscillator();
+    nada.frequency.value = 880;
+    nada.connect(audio.destination);
+    nada.start();
+    nada.stop(audio.currentTime + 0.5);
+  }
+</script>
